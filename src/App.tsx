@@ -1,7 +1,13 @@
 import './App.css';
+import FlightsTable from './components/FlightsTable';
+import Layout from './components/Layout';
 
 function App() {
-  return <div>App</div>;
+  return (
+    <Layout>
+      <FlightsTable />
+    </Layout>
+  );
 }
 
 export default App;

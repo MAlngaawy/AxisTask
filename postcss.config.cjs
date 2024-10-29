@@ -10,5 +10,7 @@ module.exports = {
         'mantine-breakpoint-xl': '88em',
       },
     },
+    tailwindcss: {}, // Add Tailwind CSS here
+    autoprefixer: {}, // Optional, but good to have with Tailwind for browser compatibility
   },
 };
