@@ -1,6 +1,7 @@
 import { NumberInput, Pagination, Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import ShowImageBtn from '../ShowImageBtn';
 
 type Flight = {
   id: string;
@@ -32,6 +33,9 @@ function FlightsTable() {
       <Table.Td>{element.code}</Table.Td>
       <Table.Td>{element.capacity}</Table.Td>
       <Table.Td>{element.departureDate}</Table.Td>
+      <Table.Td>
+        <ShowImageBtn img={element.img} />
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -54,6 +58,7 @@ function FlightsTable() {
             <Table.Th>Code</Table.Th>
             <Table.Th>Capacity</Table.Th>
             <Table.Th>Departure Date</Table.Th>
+            <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
