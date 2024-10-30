@@ -2,6 +2,7 @@ import { NumberInput, Pagination, Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ShowImageBtn from '../ShowImageBtn';
+import PageTitle from '../shared/PageTitle';
 
 type Flight = {
   id: string;
@@ -50,7 +51,7 @@ function FlightsTable() {
 
   return (
     <div className="my-10">
-      <h1>Flights Table</h1>
+      <PageTitle text="Flights Table" />
 
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
