@@ -1,24 +1,29 @@
 import { Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
+import { useState } from 'react';
+
+type Flight = {
+  id: string;
+  code: string;
+  capacity: number;
+  departureDate: string; // You may consider using Date type if it's a date object
+  status: 'processing' | 'completed' | 'cancelled'; // assuming possible statuses
+  img: string;
+};
+
 function FlightsTable() {
-  const { data } = useGetFlightsQuery(null);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const { data: flights } = useGetFlightsQuery({
+    page,
+    size,
+  });
 
-  console.log('datadata', data);
-
-  const elements = [
-    { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
-    { position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen' },
-    { position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium' },
-    { position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium' },
-    { position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium' },
-  ];
-
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.name}>
-      <Table.Td>{element.position}</Table.Td>
-      <Table.Td>{element.name}</Table.Td>
-      <Table.Td>{element.symbol}</Table.Td>
-      <Table.Td>{element.mass}</Table.Td>
+  const rows = flights?.resources?.map((element: Flight) => (
+    <Table.Tr key={element?.id}>
+      <Table.Td>{element.code}</Table.Td>
+      <Table.Td>{element.capacity}</Table.Td>
+      <Table.Td>{element.departureDate}</Table.Td>
     </Table.Tr>
   ));
 
@@ -26,13 +31,12 @@ function FlightsTable() {
     <div className="my-10">
       <h1>Flights Table</h1>
 
-      <Table>
+      <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Element position</Table.Th>
-            <Table.Th>Element name</Table.Th>
-            <Table.Th>Symbol</Table.Th>
-            <Table.Th>Atomic mass</Table.Th>
+            <Table.Th>Code</Table.Th>
+            <Table.Th>Capacity</Table.Th>
+            <Table.Th>Departure Date</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

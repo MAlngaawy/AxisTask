@@ -6,7 +6,10 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // define your API base URL
   endpoints: (builder) => ({
     getFlights: builder.query({
-      query: () => '/flights',
+      query: (params) => ({
+        url: '/flights',
+        params,
+      }),
     }),
     // addPost: builder.mutation({
     //   query: (newPost) => ({
