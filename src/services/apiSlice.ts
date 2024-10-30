@@ -1,24 +1,25 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { AddFlight } from '../types';
 
 export const apiSlice = createApi({
   reducerPath: 'api', // optional, default is 'api'
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // define your API base URL
-  endpoints: (builder) => ({
-    getFlights: builder.query({
+  endpoints: ({ query, mutation }) => ({
+    getFlights: query({
       query: (params) => ({
         url: '/flights',
         params,
       }),
     }),
-    // addPost: builder.mutation({
-    //   query: (newPost) => ({
-    //     url: '/posts',
-    //     method: 'POST',
-    //     body: newPost,
-    //   }),
-    // }),
+    addFlight: mutation({
+      query: (newFlight: AddFlight) => ({
+        url: '/flights',
+        method: 'POST',
+        body: newFlight,
+      }),
+    }),
   }),
 });
 
-export const { useGetFlightsQuery } = apiSlice;
+export const { useGetFlightsQuery, useAddFlightMutation } = apiSlice;

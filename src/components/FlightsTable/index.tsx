@@ -50,7 +50,7 @@ function FlightsTable() {
   };
 
   return (
-    <div className="my-10">
+    <div>
       <PageTitle text="Flights Table" />
 
       <Table striped highlightOnHover withTableBorder withColumnBorders>
