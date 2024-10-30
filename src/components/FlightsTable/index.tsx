@@ -1,4 +1,4 @@
-import { Table } from '@mantine/core';
+import { NumberInput, Pagination, Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
 import { useState } from 'react';
 
@@ -12,8 +12,8 @@ type Flight = {
 };
 
 function FlightsTable() {
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const [page, setPage] = useState<number>(1);
+  const [size, setSize] = useState<number>(10);
   const { data: flights } = useGetFlightsQuery({
     page,
     size,
@@ -41,6 +41,20 @@ function FlightsTable() {
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
+      <div className="mx-auto py-2 flex items-center justify-between">
+        <Pagination
+          value={page}
+          onChange={(e) => {
+            setPage(e);
+          }}
+          total={Math.ceil(flights.total / size)}
+        />
+        <NumberInput
+          label="Table Size Per Page"
+          value={size}
+          onChange={(e) => setSize(e as number)}
+        />
+      </div>
     </div>
   );
 }
