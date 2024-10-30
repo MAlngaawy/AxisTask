@@ -1,6 +1,6 @@
 import { NumberInput, Pagination, Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type Flight = {
   id: string;
@@ -12,8 +12,9 @@ type Flight = {
 };
 
 function FlightsTable() {
-  const [page, setPage] = useState<number>(1);
-  const [size, setSize] = useState<number>(10);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const size = parseInt(searchParams.get('size') || '10', 10);
   const { data: flights } = useGetFlightsQuery({
     page,
     size,
@@ -26,6 +27,14 @@ function FlightsTable() {
       <Table.Td>{element.departureDate}</Table.Td>
     </Table.Tr>
   ));
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: newPage.toString(), size: size.toString() });
+  };
+
+  const handleSizeChange = (newSize: number) => {
+    setSearchParams({ page: '1', size: newSize.toString() }); // Reset to page 1 when size changes
+  };
 
   return (
     <div className="my-10">
@@ -41,18 +50,19 @@ function FlightsTable() {
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
+
       <div className="mx-auto py-2 flex items-center justify-between">
         <Pagination
           value={page}
-          onChange={(e) => {
-            setPage(e);
-          }}
-          total={Math.ceil(flights.total / size)}
+          onChange={handlePageChange}
+          total={Math.ceil(flights?.total / size)}
         />
         <NumberInput
           label="Table Size Per Page"
           value={size}
-          onChange={(e) => setSize(e as number)}
+          onChange={(e) => handleSizeChange(+e)}
+          min={1}
+          step={1}
         />
       </div>
     </div>
