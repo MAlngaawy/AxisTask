@@ -6,8 +6,8 @@ type Flight = {
   id: string;
   code: string;
   capacity: number;
-  departureDate: string; // You may consider using Date type if it's a date object
-  status: 'processing' | 'completed' | 'cancelled'; // assuming possible statuses
+  departureDate: string;
+  status: 'processing' | 'completed' | 'cancelled';
   img: string;
 };
 
@@ -33,6 +33,7 @@ function FlightsTable() {
   };
 
   const handleSizeChange = (newSize: number) => {
+    if (newSize === null || newSize === 0) return;
     setSearchParams({ page: '1', size: newSize.toString() }); // Reset to page 1 when size changes
   };
 
@@ -59,7 +60,8 @@ function FlightsTable() {
         />
         <NumberInput
           label="Table Size Per Page"
-          value={size}
+          placeholder="Enter size"
+          value={size || ''}
           onChange={(e) => handleSizeChange(+e)}
           min={1}
           step={1}
