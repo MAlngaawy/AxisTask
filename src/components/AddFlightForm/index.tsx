@@ -5,6 +5,8 @@ import { date, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateInput } from '@mantine/dates';
 import { useAddFlightMutation } from '../../services/apiSlice';
+import { notifications } from '@mantine/notifications';
+import classes from './form.module.css';
 
 type Inputs = {
   code: string;
@@ -33,6 +35,23 @@ const AddFlightForm = () => {
     addFlight({
       ...data,
       departureDate: data.departureDate.toISOString().split('T')[0],
+    }).then((res) => {
+      console.log('resres', res);
+      if (res.error) {
+        notifications.show({
+          //@ts-expect-error RTK doesn't know the error schema
+          message: res.error.data.message,
+          classNames: classes,
+          color: 'white',
+          bg: 'red',
+        });
+      } else {
+        notifications.show({
+          message: 'Flight Added Successfully',
+          classNames: classes,
+          bg: 'green',
+        });
+      }
     });
   };
 
