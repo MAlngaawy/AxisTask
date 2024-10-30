@@ -1,6 +1,6 @@
 import { NumberInput, Pagination, Table } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type Flight = {
   id: string;
@@ -15,10 +15,17 @@ function FlightsTable() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1', 10);
   const size = parseInt(searchParams.get('size') || '10', 10);
+  const navigate = useNavigate();
+
   const { data: flights } = useGetFlightsQuery({
     page,
     size,
   });
+  // Validate page and size parameters
+  if (isNaN(page) || page < 1 || isNaN(size) || size < 1) {
+    navigate('/bad-request'); // Redirect if invalid
+    return null; // Exit component rendering
+  }
 
   const rows = flights?.resources?.map((element: Flight) => (
     <Table.Tr key={element?.id}>
