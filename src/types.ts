@@ -3,3 +3,7 @@ export type AddFlight = {
   capacity: number;
   departureDate: string;
 };
+
+export type AddFlightWithPhoto = AddFlight & {
+  photo?: File | null | undefined;
+};

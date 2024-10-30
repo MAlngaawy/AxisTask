@@ -9,7 +9,7 @@ type Flight = {
   code: string;
   capacity: number;
   departureDate: string;
-  status: 'processing' | 'completed' | 'cancelled';
+  status: 'none' | 'processing' | 'ready';
   img: string;
 };
 
@@ -35,7 +35,7 @@ function FlightsTable() {
       <Table.Td>{element.capacity}</Table.Td>
       <Table.Td>{element.departureDate}</Table.Td>
       <Table.Td>
-        <ShowImageBtn img={element.img} />
+        <ShowImageBtn img={element.img && element.id} />
       </Table.Td>
     </Table.Tr>
   ));

@@ -1,6 +1,6 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AddFlight } from '../types';
+// import { AddFlight, AddFlightWithPhoto } from '../types';
 
 export const apiSlice = createApi({
   reducerPath: 'api', // optional, default is 'api'
@@ -13,8 +13,15 @@ export const apiSlice = createApi({
       }),
     }),
     addFlight: mutation({
-      query: (newFlight: AddFlight) => ({
+      query: (newFlight: FormData) => ({
         url: '/flights',
+        method: 'POST',
+        body: newFlight,
+      }),
+    }),
+    addFlightWithPhoto: mutation({
+      query: (newFlight: FormData) => ({
+        url: '/flights/withPhoto',
         method: 'POST',
         body: newFlight,
       }),
@@ -22,4 +29,8 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetFlightsQuery, useAddFlightMutation } = apiSlice;
+export const {
+  useGetFlightsQuery,
+  useAddFlightMutation,
+  useAddFlightWithPhotoMutation,
+} = apiSlice;
