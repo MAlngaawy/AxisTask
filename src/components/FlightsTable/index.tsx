@@ -1,4 +1,4 @@
-import { NumberInput, Pagination, Table } from '@mantine/core';
+import { NumberInput, Pagination, Table, TextInput } from '@mantine/core';
 import { useGetFlightsQuery } from '../../services/apiSlice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ShowImageBtn from '../ShowImageBtn';
@@ -16,14 +16,16 @@ type Flight = {
 };
 
 function FlightsTable() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1', 10);
   const size = parseInt(searchParams.get('size') || '10', 10);
-  const navigate = useNavigate();
+  const code = searchParams.get('code') || '';
 
-  const { data: flights } = useGetFlightsQuery({
+  const { data: flights, isError } = useGetFlightsQuery({
     page,
     size,
+    ...(code && { code }), // Only include `code` if it’s not empty,
   });
   // Validate page and size parameters
   if (isNaN(page) || page < 1 || isNaN(size) || size < 1) {
@@ -57,9 +59,28 @@ function FlightsTable() {
     setSearchParams({ page: '1', size: newSize.toString() }); // Reset to page 1 when size changes
   };
 
+  const handleCodeChange = (newCode: string) => {
+    setSearchParams({
+      code: newCode,
+      size: size.toString(),
+      page: page.toString(),
+    });
+  };
+
   return (
     <div>
-      <PageTitle text="Flights Table" />
+      <div className="flex justify-between items-center">
+        <PageTitle text="Flights Table" />
+        <TextInput
+          placeholder="Search By Code"
+          value={code}
+          // maxLength={6}
+          error={code.length > 6 && 'Code must be at most 6 letters'}
+          onChange={(e) => {
+            handleCodeChange(e.target.value);
+          }}
+        />
+      </div>
 
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
@@ -71,7 +92,15 @@ function FlightsTable() {
             <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {isError || flights?.resources.length < 1 ? (
+            <div className="w-full py-10 text-4xl font-bold text-center flex justify-center">
+              No Results
+            </div>
+          ) : (
+            rows
+          )}
+        </Table.Tbody>
       </Table>
 
       <div className="mx-auto py-2 flex items-center justify-between">
