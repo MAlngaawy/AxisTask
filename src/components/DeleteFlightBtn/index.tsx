@@ -12,12 +12,20 @@ const DeleteFlightBtn = ({ flightId }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [deleteFlight] = useDeleteFlightMutation();
   const deleteFlightFunc = async () => {
-    deleteFlight({ id: flightId }).then(() => {
-      notifications.show({
-        message: 'Flight Deleted Successfully',
-        bg: 'green',
-        classNames: classes,
-      });
+    deleteFlight({ id: flightId }).then((res) => {
+      if (res.error) {
+        notifications.show({
+          message: 'Sorry, somthing went wrong',
+          bg: 'red',
+          classNames: classes,
+        });
+      } else {
+        notifications.show({
+          message: 'Flight Deleted Successfully',
+          bg: 'green',
+          classNames: classes,
+        });
+      }
       close();
     });
   };
