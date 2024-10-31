@@ -132,6 +132,7 @@ const EditFlightForm = ({ flightData }: Props) => {
           classNames: classes,
           bg: 'green',
         });
+        close();
       }
     });
   };
