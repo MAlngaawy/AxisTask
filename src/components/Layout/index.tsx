@@ -8,8 +8,8 @@ const Layout = () => {
         <header>
           <nav className="bg-blue-600 text-white p-4 my-5 rounded-xl">
             <ul className="flex items-center gap-5">
-              <MyNavLink name="Flights Table" url="/" />
-              <MyNavLink name="Add Flight Form" url="/add-flight" />
+              <MyNavLink name="Flights" url="/" />
+              <MyNavLink name="Add Flight" url="/add-flight" />
             </ul>
           </nav>
         </header>

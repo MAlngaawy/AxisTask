@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import ShowImageBtn from '../ShowImageBtn';
 import PageTitle from '../shared/PageTitle';
 import DeleteFlightBtn from '../DeleteFlightBtn';
+import EditFlightForm from '../EditFlightForm';
 
 type Flight = {
   id: string;
@@ -39,7 +40,10 @@ function FlightsTable() {
         <ShowImageBtn img={element.img && element.id} />
       </Table.Td>
       <Table.Td>
-        <DeleteFlightBtn flightId={element.id} />
+        <div className="flex gap-2 items-center justify-center">
+          <DeleteFlightBtn flightId={element.id} />
+          <EditFlightForm flightData={element} />
+        </div>
       </Table.Td>
     </Table.Tr>
   ));

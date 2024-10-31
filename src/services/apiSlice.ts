@@ -1,5 +1,6 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Inputs } from '../components/EditFlightForm';
 // import { AddFlight, AddFlightWithPhoto } from '../types';
 
 export const apiSlice = createApi({
@@ -11,6 +12,12 @@ export const apiSlice = createApi({
       query: (params) => ({
         url: '/flights',
         params,
+      }),
+      providesTags: ['flight'],
+    }),
+    getOneFlight: query({
+      query: ({ id }) => ({
+        url: `/flights/${id}/details`,
       }),
       providesTags: ['flight'],
     }),
@@ -30,6 +37,36 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['flight'],
     }),
+
+    updateFlight: mutation({
+      query: ({
+        data,
+        flightId,
+      }: {
+        data: FormData | Inputs;
+        flightId: string;
+      }) => ({
+        url: `/flights/${flightId}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['flight'],
+    }),
+    updateFlightWithPhoto: mutation({
+      query: ({
+        data,
+        flightId,
+      }: {
+        data: FormData | Inputs;
+        flightId: string;
+      }) => ({
+        url: `/flights/${flightId}/withPhoto`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['flight'],
+    }),
+
     deleteFlight: mutation({
       query: ({ id }: { id: string }) => ({
         url: `/flights/${id}`,
@@ -42,7 +79,10 @@ export const apiSlice = createApi({
 
 export const {
   useGetFlightsQuery,
+  useGetOneFlightQuery,
   useAddFlightMutation,
   useAddFlightWithPhotoMutation,
+  useUpdateFlightMutation,
+  useUpdateFlightWithPhotoMutation,
   useDeleteFlightMutation,
 } = apiSlice;
