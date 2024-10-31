@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 const PrivateRoute = () => {
   const isAuthenticated = Cookies.get('token');
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/register" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

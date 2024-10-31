@@ -2,24 +2,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
-import { useSignupMutation } from '../services/apiSlice';
+import { useLoginMutation } from '../services/apiSlice';
 import Cookies from 'js-cookie';
 import { Link, Navigate } from 'react-router-dom';
 
 const validationSchema = object().shape({
-  name: string().required(),
   email: string().email().required(),
   password: string().required(),
 });
 
 type Inputs = {
-  name: string;
   email: string;
   password: string;
 };
 
-const Register = () => {
-  const [signUp] = useSignupMutation();
+const Login = () => {
+  const [login] = useLoginMutation();
   const token = Cookies.get('token');
 
   const {
@@ -31,24 +29,19 @@ const Register = () => {
   });
 
   const onSubmit = (data: Inputs) => {
-    signUp(data).then((res) => console.log('res.datares.datares.data', res));
+    login(data);
   };
 
   if (token) return <Navigate to={'/'} />;
 
   return (
     <div className="mx-auto my-10 border rounded-xl max-w-72 p-8">
-      <h1 className="text-lg text-center my-2">Register</h1>
+      <h1 className="text-lg text-center my-2">Login</h1>
       <form
         className="flex flex-col gap-4 mt-5"
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
-        <TextInput
-          error={errors.name?.message}
-          {...register('name')}
-          placeholder="Name"
-        />
         <TextInput
           error={errors.email?.message}
           {...register('email')}
@@ -59,11 +52,11 @@ const Register = () => {
           {...register('password')}
           placeholder="password"
         />
-        <Button type="submit">Register</Button>
+        <Button type="submit">Login</Button>
         <p className="text-xs text-gray-500 text-center">
-          Already have account?{' - '}
-          <Link className="text-blue-500" to={'/login'}>
-            Login
+          Don't have account?{' - '}
+          <Link className="text-blue-500" to={'/register'}>
+            Sign up
           </Link>
         </p>
       </form>
@@ -71,4 +64,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

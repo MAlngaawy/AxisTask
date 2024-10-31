@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import AddFlightForm from './components/AddFlightForm';
 import Register from './pages/Register';
 import PrivateRoute from './auth/PrivateRoute';
+import Login from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: '/register', element: <Register /> },
+      { path: '/login', element: <Login /> },
     ],
   },
 ]);

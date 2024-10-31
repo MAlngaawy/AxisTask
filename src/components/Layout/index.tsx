@@ -1,26 +1,36 @@
-import { Container } from '@mantine/core';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Button, Container } from '@mantine/core';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+// import { useUserDataQuery } from '../../services/apiSlice';
 
 const Layout = () => {
-  // const navigate = useNavigate();
-  // const token = Cookies.get('token');
-
-  // useEffect(() => {
-  //   if (!token) {
-  //     console.log('first');
-  //     navigate('/register');
-  //   }
-  // }, [token]);
+  const token = Cookies.get('token');
+  //! I think user api has an issue
+  // const { data: userData } = useUserDataQuery({});
+  const navigate = useNavigate();
+  const logOutFun = () => {
+    Cookies.remove('token');
+    Cookies.remove('refreshToken');
+    navigate('/login');
+  };
 
   return (
     <Container size={'lg'}>
       <div>
         <header>
-          <nav className="bg-blue-600 text-white p-4 my-5 rounded-xl">
+          <nav className="bg-blue-600 text-white p-4 my-5 rounded-xl flex justify-between items-center">
+            {/* <div className="flex gap-2"> */}
+            {/* {token && 'user'} */}
             <ul className="flex items-center gap-5">
               <MyNavLink name="Flights" url="/" />
               <MyNavLink name="Add Flight" url="/add-flight" />
             </ul>
+            {/* </div> */}
+            {token && (
+              <Button color="red" onClick={() => logOutFun()}>
+                Log Out
+              </Button>
+            )}
           </nav>
         </header>
         <main>

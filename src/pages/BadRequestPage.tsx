@@ -24,7 +24,7 @@ const BadRequestPage = () => {
           URL or go back to the homepage.
         </p>
         <button
-          onClick={() => navigate(-2)}
+          onClick={() => navigate('/')}
           className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
         >
           Go to Homepage

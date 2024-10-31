@@ -25,6 +25,11 @@ export type UserSignup = {
   password: string;
 };
 
+export type UserLogin = {
+  email: string;
+  password: string;
+};
+
 export type SignupRes = {
   id: string;
   name: string;

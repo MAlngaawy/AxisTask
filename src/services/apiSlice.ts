@@ -1,15 +1,19 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Inputs } from '../components/EditFlightForm';
-import { SignupRes, UserSignup } from '../types';
+import { SignupRes, UserLogin, UserSignup } from '../types';
 import Cookies from 'js-cookie';
 import { notifications } from '@mantine/notifications';
 import classes from '../assets/notifications.module.css';
+import { BASE_HEADERS } from '../auth/dataService';
 // import { AddFlight, AddFlightWithPhoto } from '../types';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // define your API base URL
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000/',
+    prepareHeaders: BASE_HEADERS,
+  }), // define your API base URL
   tagTypes: ['flight'],
   endpoints: ({ query, mutation }) => ({
     //? Auth
@@ -23,15 +27,42 @@ export const apiSlice = createApi({
         try {
           const { data } = await queryFulfilled;
           Cookies.set('token', data.token);
-        } catch (error: unknown) {
+          Cookies.set('refreshToken', data.refreshToken);
+        } catch (error) {
           notifications.show({
-            //@ts-expect-error expect any or unknown type
-            message: error?.message,
-            color: 'red',
+            //@ts-expect-error RTK doesn't know the error schema
+            message: error.error.data.message,
             classNames: classes,
+            color: 'white',
+            bg: 'red',
           });
         }
       },
+    }),
+    login: mutation<SignupRes, UserLogin>({
+      query: (body) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          Cookies.set('token', data.token);
+          Cookies.set('refreshToken', data.refreshToken);
+        } catch (error: unknown) {
+          notifications.show({
+            //@ts-expect-error RTK doesn't know the error schema
+            message: error.error.data.message,
+            classNames: classes,
+            color: 'white',
+            bg: 'red',
+          });
+        }
+      },
+    }),
+    userData: query({
+      query: () => 'auth/me',
     }),
 
     //? Flights CRUDS
@@ -104,6 +135,8 @@ export const apiSlice = createApi({
 
 export const {
   useSignupMutation,
+  useLoginMutation,
+  useUserDataQuery,
   useGetFlightsQuery,
   useGetOneFlightQuery,
   useAddFlightMutation,
