@@ -11,13 +11,17 @@ const ShowImageBtn = ({ img }: Props) => {
   const [photo, setPhoto] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:3000/flights/${img}/photo`)
-      .then((res) => res.blob())
-      .then((data) => {
-        const url = URL.createObjectURL(data);
-        setPhoto(url);
-      });
-  }, []);
+    // Fetch the photo only when the modal is opened and no photo has been loaded yet
+    if (opened && !photo && img) {
+      fetch(`http://localhost:3000/flights/${img}/photo`)
+        .then((res) => res.blob())
+        .then((data) => {
+          const url = URL.createObjectURL(data);
+          setPhoto(url);
+        })
+        .catch((error) => console.error('Error fetching image:', error));
+    }
+  }, [opened, img, photo]);
 
   return (
     <>
