@@ -2,6 +2,16 @@ import { Container } from '@mantine/core';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const Layout = () => {
+  // const navigate = useNavigate();
+  // const token = Cookies.get('token');
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     console.log('first');
+  //     navigate('/register');
+  //   }
+  // }, [token]);
+
   return (
     <Container size={'lg'}>
       <div>

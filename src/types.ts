@@ -18,3 +18,23 @@ export type Flight = {
   status: FlightStatus;
   img: string;
 };
+
+export type UserSignup = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type SignupRes = {
+  id: string;
+  name: string;
+  email: string;
+  token: string;
+  refreshToken: string;
+};
+
+export type RequestError = {
+  code: number;
+  type: string;
+  message: string;
+};

@@ -1,13 +1,40 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Inputs } from '../components/EditFlightForm';
+import { SignupRes, UserSignup } from '../types';
+import Cookies from 'js-cookie';
+import { notifications } from '@mantine/notifications';
+import classes from '../assets/notifications.module.css';
 // import { AddFlight, AddFlightWithPhoto } from '../types';
 
 export const apiSlice = createApi({
-  reducerPath: 'api', // optional, default is 'api'
+  reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // define your API base URL
   tagTypes: ['flight'],
   endpoints: ({ query, mutation }) => ({
+    //? Auth
+    signup: mutation<SignupRes, UserSignup>({
+      query: (body) => ({
+        url: '/auth/register',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          Cookies.set('token', data.token);
+        } catch (error: unknown) {
+          notifications.show({
+            //@ts-expect-error expect any or unknown type
+            message: error?.message,
+            color: 'red',
+            classNames: classes,
+          });
+        }
+      },
+    }),
+
+    //? Flights CRUDS
     getFlights: query({
       query: (params) => ({
         url: '/flights',
@@ -37,7 +64,6 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['flight'],
     }),
-
     updateFlight: mutation({
       query: ({
         data,
@@ -66,7 +92,6 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['flight'],
     }),
-
     deleteFlight: mutation({
       query: ({ id }: { id: string }) => ({
         url: `/flights/${id}`,
@@ -78,6 +103,7 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useSignupMutation,
   useGetFlightsQuery,
   useGetOneFlightQuery,
   useAddFlightMutation,
