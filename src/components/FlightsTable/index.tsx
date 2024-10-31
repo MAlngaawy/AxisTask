@@ -3,6 +3,7 @@ import { useGetFlightsQuery } from '../../services/apiSlice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ShowImageBtn from '../ShowImageBtn';
 import PageTitle from '../shared/PageTitle';
+import DeleteFlightBtn from '../DeleteFlightBtn';
 
 type Flight = {
   id: string;
@@ -37,6 +38,9 @@ function FlightsTable() {
       <Table.Td>
         <ShowImageBtn img={element.img && element.id} />
       </Table.Td>
+      <Table.Td>
+        <DeleteFlightBtn flightId={element.id} />
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -59,6 +63,7 @@ function FlightsTable() {
             <Table.Th>Code</Table.Th>
             <Table.Th>Capacity</Table.Th>
             <Table.Th>Departure Date</Table.Th>
+            <Table.Th>Preview Img</Table.Th>
             <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>

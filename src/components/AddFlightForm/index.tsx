@@ -16,7 +16,7 @@ import {
   useAddFlightWithPhotoMutation,
 } from '../../services/apiSlice';
 import { notifications } from '@mantine/notifications';
-import classes from './form.module.css';
+import classes from '../../assets/notifications.module.css';
 import { useEffect, useState } from 'react';
 
 type Inputs = {
