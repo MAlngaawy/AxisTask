@@ -31,7 +31,7 @@ const Register = () => {
   });
 
   const onSubmit = (data: Inputs) => {
-    signUp(data).then((res) => console.log('res.datares.datares.data', res));
+    signUp(data);
   };
 
   if (token) return <Navigate to={'/'} />;
