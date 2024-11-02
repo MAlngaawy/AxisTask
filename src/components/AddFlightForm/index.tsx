@@ -18,6 +18,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import classes from '../../assets/notifications.module.css';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = {
   code: string;
@@ -31,6 +32,7 @@ const AddFlightForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [addFlight] = useAddFlightMutation();
   const [addFlightWithPhoto] = useAddFlightWithPhotoMutation();
+  const navigate = useNavigate();
 
   const validationSchema = object().shape({
     code: string().min(6).max(6).required(),
@@ -72,7 +74,10 @@ const AddFlightForm = () => {
   }, [selectedFile]);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const addFunc = withPhoto ? addFlightWithPhoto : addFlight;
+    const normalData = {
+      ...data,
+      departureDate: data.departureDate.toISOString().split('T')[0],
+    };
     const formData = new FormData();
     formData.append('code', data.code);
     formData.append('capacity', data.capacity.toString()); // Convert number to string
@@ -83,8 +88,11 @@ const AddFlightForm = () => {
     if (data.photo) {
       formData.append('photo', data.photo); // Append the photo file
     }
+    const addFunc = withPhoto
+      ? addFlightWithPhoto(formData)
+      : addFlight(normalData);
 
-    addFunc(formData).then((res) => {
+    Promise.resolve(addFunc).then((res) => {
       if (res.error) {
         notifications.show({
           //@ts-expect-error RTK doesn't know the error schema
@@ -99,6 +107,7 @@ const AddFlightForm = () => {
           classNames: classes,
           bg: 'green',
         });
+        navigate('/');
       }
     });
   };

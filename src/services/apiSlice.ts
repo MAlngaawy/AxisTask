@@ -1,7 +1,7 @@
 // src/services/apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Inputs } from '../components/EditFlightForm';
-import { SignupRes, UserLogin, UserSignup } from '../types';
+import { AddFlight, SignupRes, UserLogin, UserSignup } from '../types';
 import Cookies from 'js-cookie';
 import { notifications } from '@mantine/notifications';
 import classes from '../assets/notifications.module.css';
@@ -80,7 +80,7 @@ export const apiSlice = createApi({
       providesTags: ['flight'],
     }),
     addFlight: mutation({
-      query: (newFlight: FormData) => ({
+      query: (newFlight: AddFlight) => ({
         url: '/flights',
         method: 'POST',
         body: newFlight,

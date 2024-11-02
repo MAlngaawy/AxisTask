@@ -11,7 +11,7 @@ type Props = {
 const FlightsCards = ({ flights }: Props) => {
   return (
     <div className="flex gap-4 flex-wrap justify-center">
-      {flights.map((oneFlight) => {
+      {flights?.map((oneFlight) => {
         return (
           <Card key={oneFlight.id}>
             <div className="w-60 h-full flex flex-col justify-between">
