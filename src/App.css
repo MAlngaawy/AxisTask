@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  font-size: 87.5%; /* This sets the base size to 14px (14/16 = 0.875) */
+}

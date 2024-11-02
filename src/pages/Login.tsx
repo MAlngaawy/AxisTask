@@ -35,7 +35,7 @@ const Login = () => {
   if (token) return <Navigate to={'/'} />;
 
   return (
-    <div className="mx-auto my-10 border rounded-xl max-w-72 p-8">
+    <div className="mx-auto my-10 border rounded-xl max-w-72 p-4 sm:p-8">
       <h1 className="text-lg text-center my-2">Login</h1>
       <form
         className="flex flex-col gap-4 mt-5"

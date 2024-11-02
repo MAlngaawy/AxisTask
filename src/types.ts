@@ -19,6 +19,12 @@ export type Flight = {
   img: string;
 };
 
+export type Flights = {
+  count: number;
+  resources: Flight[];
+  total: number;
+};
+
 export type UserSignup = {
   name: string;
   email: string;

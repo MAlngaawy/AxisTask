@@ -1,10 +1,9 @@
-import { NumberInput, Pagination, Table, TextInput } from '@mantine/core';
-import { useGetFlightsQuery } from '../../services/apiSlice';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { NumberInput, Pagination, Table } from '@mantine/core';
+import { SetURLSearchParams } from 'react-router-dom';
 import ShowImageBtn from '../ShowImageBtn';
-import PageTitle from '../shared/PageTitle';
 import DeleteFlightBtn from '../DeleteFlightBtn';
 import EditFlightForm from '../EditFlightForm';
+import { Flights } from '../../types';
 
 type Flight = {
   id: string;
@@ -15,40 +14,40 @@ type Flight = {
   img: string;
 };
 
-function FlightsTable() {
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('page') || '1', 10);
-  const size = parseInt(searchParams.get('size') || '10', 10);
-  const code = searchParams.get('code') || '';
+type Props = {
+  flights: Flights;
+  setSearchParams: SetURLSearchParams;
+  size: number;
+  page: number;
+  isError: boolean;
+};
 
-  const { data: flights, isError } = useGetFlightsQuery({
-    page,
-    size,
-    ...(code && { code }), // Only include `code` if it’s not empty,
-  });
-  // Validate page and size parameters
-  if (isNaN(page) || page < 1 || isNaN(size) || size < 1) {
-    navigate('/bad-request'); // Redirect if invalid
-    return null; // Exit component rendering
-  }
-
-  const rows = flights?.resources?.map((element: Flight) => (
-    <Table.Tr key={element?.id}>
-      <Table.Td>{element.code}</Table.Td>
-      <Table.Td>{element.capacity}</Table.Td>
-      <Table.Td>{element.departureDate}</Table.Td>
-      <Table.Td>
-        <ShowImageBtn img={element.img && element.id} />
-      </Table.Td>
-      <Table.Td>
-        <div className="flex gap-2 items-center justify-center">
-          <DeleteFlightBtn flightId={element.id} />
-          <EditFlightForm flightData={element} />
-        </div>
-      </Table.Td>
-    </Table.Tr>
-  ));
+function FlightsTable({
+  flights,
+  setSearchParams,
+  size,
+  page,
+  isError,
+}: Props) {
+  const rows = flights?.resources
+    //! I'll make a filter here to remove a one record from the data because this record caused error
+    ?.filter((item) => item.id !== 'a34920cd-cc28-4423-bf83-e15fb859480c')
+    ?.map((element: Flight) => (
+      <Table.Tr key={element?.id}>
+        <Table.Td>{element.code}</Table.Td>
+        <Table.Td>{element.capacity}</Table.Td>
+        <Table.Td>{element.departureDate}</Table.Td>
+        <Table.Td>
+          <ShowImageBtn img={element.img && element.id} />
+        </Table.Td>
+        <Table.Td>
+          <div className="flex gap-2 items-center justify-center">
+            <DeleteFlightBtn flightId={element.id} />
+            <EditFlightForm flightData={element} />
+          </div>
+        </Table.Td>
+      </Table.Tr>
+    ));
 
   const handlePageChange = (newPage: number) => {
     setSearchParams({ page: newPage.toString(), size: size.toString() });
@@ -59,29 +58,8 @@ function FlightsTable() {
     setSearchParams({ page: '1', size: newSize.toString() }); // Reset to page 1 when size changes
   };
 
-  const handleCodeChange = (newCode: string) => {
-    setSearchParams({
-      code: newCode,
-      size: size.toString(),
-      page: page.toString(),
-    });
-  };
-
   return (
     <div>
-      <div className="flex justify-between items-center">
-        <PageTitle text="Flights Table" />
-        <TextInput
-          placeholder="Search By Code"
-          value={code}
-          // maxLength={6}
-          error={code.length > 6 && 'Code must be at most 6 letters'}
-          onChange={(e) => {
-            handleCodeChange(e.target.value);
-          }}
-        />
-      </div>
-
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>

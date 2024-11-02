@@ -130,6 +130,13 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['flight'],
     }),
+    // flightPhoto: query({
+    //   query: ({ id }) => ({
+    //     url: `/flights/${id}/photo`,
+    //   }),
+    //   providesTags: ['flight'],
+    //   transformResponse: (response: Blob) => URL.createObjectURL(response), // This will transform the response to a URL
+    // }),
   }),
 });
 
@@ -144,4 +151,5 @@ export const {
   useUpdateFlightMutation,
   useUpdateFlightWithPhotoMutation,
   useDeleteFlightMutation,
+  // useFlightPhotoQuery,
 } = apiSlice;

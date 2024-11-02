@@ -18,7 +18,7 @@ const Layout = () => {
     <Container size={'lg'}>
       <div>
         <header>
-          <nav className="bg-blue-600 text-white p-4 my-5 rounded-xl flex justify-between items-center">
+          <nav className="bg-blue-600 text-white p-4 my-5 rounded-xl flex justify-between items-center max-w-full">
             {/* <div className="flex gap-2"> */}
             {/* {token && 'user'} */}
             <ul className="flex items-center gap-5">
